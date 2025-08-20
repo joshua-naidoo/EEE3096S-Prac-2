@@ -36,6 +36,23 @@ ASM_Main:
 
 main_loop:
 
+    LDR R3, GPIOA_BASE 		@ Get address of GPIO A and read into R3
+    LDR R4, [R3, #0x10]     @ Reads Input Data Register (IDR) to R4
+
+// Task 2
+@ When SW0 is pressed, increment by 2
+    LSLS R7, R4, #31        @ Reads shifted R4 to R7 to retrieve button 0 state
+    BNE no_SW0
+    MOVS R5, #2 			@ Sets R5 to value 2 (used R5 as the register for storing the increments)
+no_SW0:
+
+// Task 4
+@ When SW2 is pressed, set pattern to 0xAA
+    LSLS R7, R4, #29        @ Reads shifted R4 to R7 to retrieve button 2 state
+    BNE no_SW2
+    MOVS R2, #0xAA			@ Sets LED register R2 to pattern 0xAA
+    B write_leds			@ Goes straight to writing the LEDs
+no_SW2:
 
 write_leds:
 	STR R2, [R1, #0x14]
@@ -50,5 +67,5 @@ GPIOB_BASE:  		.word 0x48000400
 MODER_OUTPUT: 		.word 0x5555
 
 @ TODO: Add your own values for these delays
-LONG_DELAY_CNT: 	.word 0
-SHORT_DELAY_CNT: 	.word 0
+LONG_DELAY_CNT: 	.word 800000     @ ~0.7s
+SHORT_DELAY_CNT: 	.word 300000     @ ~0.3s
