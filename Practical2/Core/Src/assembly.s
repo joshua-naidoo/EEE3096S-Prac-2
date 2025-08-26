@@ -34,10 +34,13 @@ ASM_Main:
 
 @ TODO: Add code, labels and logic for button checks and LED patterns
 
+@ Main loop with button checks and LED updates
 main_loop:
-
+	@ Task 5: Check SW3 (freeze pattern)
     LDR R3, GPIOA_BASE 		@ Get address of GPIO A and read into R3
     LDR R4, [R3, #0x10]     @ Reads Input Data Register (IDR) to R4
+	LSLS R7, R4, #28        @ Shift to test SW3 (bit 3)
+	BEQ sw3_loop            @ Freeze if SW3 pressed
 
 // Task 2
 @ When SW0 is pressed, increment by 2
